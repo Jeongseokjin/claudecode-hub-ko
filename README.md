@@ -1,13 +1,20 @@
-<div align="center">
-
 # claudecode-hub-ko
 
-**Claude Code 상태줄, 읽히게.**
+**Claude Code 상태줄 설정.** ccstatusline 의 기본값을 고쳐 쓴 것이고, 언어 10개가 들어 있다.
 
-모델 · 레포 · 가지 · 컨텍스트 · 사용량, 그리고 **모델별 주간 한도**까지 한눈에.
-10개 언어. 포크 없이 설정 파일 하나로.
+도구를 고치지 않는다. 설정 파일 하나로 끝난다.
 
-</div>
+---
+
+## 무엇이 달라지나
+
+설치 직후 ccstatusline 은 이렇게 나온다.
+
+```
+Model: Opus 5 | Ctx: 669.4k | ⎇ main | (+0,-0)
+```
+
+이 설정을 넣으면 이렇게 나온다.
 
 ```
 [Opus 5] │ loginexio-api git:(main)
@@ -15,29 +22,120 @@
 PR #853 │ CI ✓3 │ 캐시 87%
 ```
 
-셋째 줄은 **볼 것이 있을 때만** 뜬다. PR 도 CI 도 캐시도 없으면 줄이 통째로 사라진다.
+셋째 줄은 볼 것이 있을 때만 나온다. PR 도 CI 도 캐시도 없으면 줄이 통째로 사라진다.
 
 ---
 
-## 30초면 깔린다
+## 무엇을 왜 고쳤나
+
+고친 자리마다 이유가 있다. 아홉 가지다.
+
+### 1. 컨텍스트를 토큰 수에서 퍼센트로
+
+기본값은 `Ctx: 669.4k` 라고 토큰 수를 준다. 그런데 **그게 한도의 몇 퍼센트인지는 안 알려 준다.**
+모델마다 한도가 다르니 669.4k 만 봐서는 여유가 있는지 알 수 없다. 퍼센트로 바꾸고 막대를 붙였다.
+
+```jsonc
+{ "type": "context-percentage", "metadata": { "display": "slider" } }
+```
+
+### 2. 사용량과 주간 한도를 더했다
+
+기본값에는 **사용량이 아예 없다.** 5시간 창과 주간 창을 더했다. 한도에 걸려서 멈추기 전에
+미리 보이는 편이 낫다.
+
+### 3. 모델별 주간 한도를 더했다
+
+Opus·Sonnet·Fable 은 **주간 한도가 따로 돌고 따로 초기화된다.** 전체 주간이 2% 여도
+Opus 만 90% 일 수 있다. 합계만 봐서는 어느 모델이 남았는지 모른다.
+
+```jsonc
+{ "type": "weekly-opus-usage" }
+{ "type": "weekly-sonnet-usage" }
+{ "type": "fable-weekly-usage" }
+```
+
+모델별 창은 Claude Code 가 그 값을 줄 때만 나온다. 안 주면 그 자리가 조용히 빈다.
+
+### 4. 이름표를 번역했다
+
+ccstatusline 위젯은 `Ctx Used:` 처럼 영어 이름표를 스스로 붙인다. 그 이름표를 떼고
+원하는 말을 앞에 넣는다.
+
+```jsonc
+// rawValue 가 위젯의 이름표를 뗀다
+{ "type": "context-percentage", "rawValue": true }    // "Ctx Used: 62%" → "62%"
+
+// 그 앞에 custom-text 로 원하는 말을 넣는다
+{ "type": "custom-text", "customText": "컨텍스트 " }
+```
+
+이 방식이라 도구를 고칠 필요가 없고, 언어를 바꾸는 것이 파일 하나 갈아 끼우는 일이 된다.
+
+### 5. 값이 없을 때 이름표도 같이 숨긴다
+
+4번을 그냥 쓰면 문제가 생긴다. PR 이 없을 때 값은 사라지는데 **`PR` 이라는 글자만 남는다.**
+이름표를 값에 붙여 두면 같이 사라진다.
+
+```jsonc
+{
+  "type": "custom-text", "customText": "PR ",
+  "merge": true,
+  "metadata": { "hide": "merge-target-hidden" }
+}
+```
+
+### 6. PR·CI·캐시를 셋째 줄로 내렸다
+
+한 줄에 다 넣으면 터미널을 넘긴다. 이 셋은 **늘 있는 값이 아니라** 있을 때만 의미가 있어서
+따로 뺐다. 셋 다 없으면 줄이 아예 안 그려진다.
+
+### 7. 소수점을 뗐다
+
+`62.0%` 의 `.0` 은 자리만 먹는다. 상태줄은 좁다.
+
+```jsonc
+{ "numberFormat": { "style": "whole" } }
+```
+
+### 8. 색을 넣었다
+
+기본값은 색이 거의 없어서 어디가 값이고 어디가 이름표인지 구분이 안 된다. 값은 밝게,
+구분자(`│`·`·`)는 어둡게 둬서 값이 먼저 눈에 들어오게 했다.
+
+### 9. 경로 대신 레포 이름을 쓴다
+
+`current-working-dir` 은 전체 경로나 `.../이름` 을 준다. `git-root-dir` 은 레포 이름만 준다.
+
+---
+
+## 쓰는 법
+
+### 깔기
 
 ```bash
 git clone https://github.com/Jeongseokjin/claudecode-hub-ko.git
 cd claudecode-hub-ko
-./install.sh          # 한국어
+./install.sh
 ```
 
-Claude Code 를 다시 켜면 보인다. 끝.
+Claude Code 를 다시 켜면 보인다.
+
+설치 스크립트가 하는 일은 넷이다.
+
+1. `ccstatusline` 이 없으면 깐다 (`npm install -g ccstatusline@2.2.30`)
+2. 고른 언어의 설정을 `~/.config/ccstatusline/settings.json` 에 넣는다
+3. 사슬 스크립트를 `~/.claude/statusline.sh` 에 넣고 `node` 경로를 이 기계 것으로 박는다
+4. `~/.claude/settings.json` 의 `statusLine` 한 줄만 바꾼다
+
+**있던 파일은 덮어쓰기 전에 시각을 붙여 남긴다.** `settings.json` 의 다른 칸은 안 건드린다.
+
+### 언어 고르기
 
 ```bash
-./install.sh ja       # 다른 언어
-./install.sh --list   # 고를 수 있는 언어
+./install.sh --list     # 고를 수 있는 언어를 본다
+./install.sh ja         # 일본어로 깐다
 ```
-
-설치 스크립트는 `ccstatusline` 을 깔고, 설정을 넣고, `node` 경로를 이 기계 것으로 박고,
-`~/.claude/settings.json` 의 `statusLine` 한 줄만 건드린다. **있던 파일은 시각을 붙여 남긴다.**
-
-## 언어 10개
 
 | | | | | |
 |---|---|---|---|---|
@@ -51,106 +149,91 @@ zh-Hans   上下文 ▓▓▓▓▓▓░░░░ 62% │ 用量 ▓░░░�
 ru        Контекст ▓▓▓▓▓▓░░░░ 62% │ Расход ▓░░░░░░░░░ 9% │ Неделя ░░░░░░░░░░ 2%
 ```
 
-색·막대·순서는 전부 같다. **이름표만 다르다.**
+색·막대·순서는 전부 같다. 이름표만 다르다.
 
-## 왜 이걸 만들었나
+### 고치기
 
-Claude Code 상태줄 도구가 둘 있는데 둘 다 반쪽이었다.
-
-**claude-hud** 은 모양이 좋다. 막대도 예쁘고 배치도 낫다. 그런데 **모델별 사용량을 못 본다.**
-Claude Code 가 주는 stdin 의 `rate_limits` 에는 `five_hour` 와 `seven_day` 둘뿐이고
-`model_scoped` 가 안 온다. Opus 를 얼마나 썼는지, Fable 이 남았는지 알 길이 없다.
-
-**ccstatusline** 은 API 를 직접 조회해서 모델별을 본다. 그런데 이름표가 영어뿐이다.
-
-그래서 **ccstatusline 을 claude-hud 모양으로 꾸몄다.** 도구는 안 고친다.
-
-## 포크를 안 뜬다
-
-한국어를 넣겠다고 도구 소스를 고치면, 그 도구가 업데이트될 때마다 다시 고쳐야 한다.
-여기서는 **설정 파일 하나**로 끝낸다.
-
-```jsonc
-// 1. rawValue 로 위젯의 영어 이름표를 뗀다
-{ "type": "context-percentage", "rawValue": true }     // "Ctx Used: 62%" → "62%"
-
-// 2. 그 앞에 custom-text 로 원하는 말을 넣는다
-{ "type": "custom-text", "customText": "컨텍스트 " }
-```
-
-`npm update` 해도 안 깨진다. 언어를 바꾸는 것도 파일 하나 갈아 끼우는 일이다.
-
-### 값이 없을 때 이름표만 남는 문제
-
-PR 이 없으면 `PR` 이라는 글자만 덩그러니 남는다. 이름표를 값에 **붙여** 둔다.
-
-```jsonc
-{
-  "type": "custom-text", "customText": "PR ",
-  "merge": true,
-  "metadata": { "hide": "merge-target-hidden" }   // 값이 숨으면 이름표도 숨는다
-}
-```
-
-## 알아 둘 함정 다섯
-
-여기서 시간을 썼다. 적어 둔다.
-
-**색은 `hex:RRGGBB` 다.** `#RRGGBB` 는 조용히 무시된다 — 굵게만 들어가고 색이 안 나간다.
-오류도 안 난다.
-
-```jsonc
-{ "color": "hex:39FF14" }   // ✅
-{ "color": "#39FF14" }      // ❌ 아무 일도 안 일어난다
-```
-
-**`colorLevel` 이 3 이어야 한다.** 2(ansi256)면 hex 가 가까운 256색으로 뭉개진다.
-
-**Fable 위젯만 이름 순서가 다르다.**
-
-```
-weekly-opus-usage     ✅
-weekly-sonnet-usage   ✅
-weekly-fable-usage    ❌ 이런 건 없다
-fable-weekly-usage    ✅ 이거다
-```
-
-**막대 문자는 못 바꾼다.** `slider` 는 `▓░`(폭 10), `progress` 는 `[█░]`(대괄호 포함).
-둘 중 고르는 것뿐이다. 여기서는 대괄호 없는 `slider` 를 쓴다.
-
-**설정은 `$HOME/.config/ccstatusline/` 에 둬야 한다.** ccstatusline 은 `XDG_CONFIG_HOME`
-을 안 본다 — `os.homedir()` 아래 `.config` 를 박아 쓴다. XDG 를 따라 다른 데 두면
-파일은 잘 놓이는데 화면은 안 바뀐다. 이것도 오류가 안 난다.
-
-## 사슬 스크립트가 하는 일 셋
-
-상태줄을 바로 부르지 않고 `statusline.sh` 를 한 번 거친다. 이유가 있다.
-
-**`NODE_OPTIONS` 를 끊는다.** 이게 제일 중요하다. 바깥에서 `--require` 로 임시 파일을
-preload 하게 걸어 두는 도구가 있는데, 그 임시 파일을 OS 가 청소해 간다. 사라진 뒤에는
-node 가 시작조차 못 하고, 그러면 **상태줄은 오류 없이 그냥 안 보인다.** 원인을 찾기가
-아주 어렵다. 여기서 끊어 두면 바깥 설정과 무관하게 뜬다.
-
-**`COLUMNS` 를 `stty` 로 실측한다.** stdout 이 파이프라 터미널 폭이 안 물려 내려온다.
-안 재면 줄바꿈 계산이 틀려 화면이 접힌다.
-
-**느린 일은 뒤로 보낸다.** 렌더링을 늦추지 않는다.
-
-## 내 맘대로 고치기
-
-`~/.config/ccstatusline/settings.json` 을 열면 된다. `lines` 배열 하나가 화면 한 줄이다.
+`~/.config/ccstatusline/settings.json` 을 열면 된다. `lines` 배열 하나가 화면 한 줄이고,
+그 안의 객체 하나가 위젯 하나다.
 
 | 하고 싶은 것 | 어떻게 |
 |---|---|
 | 막대 없애기 | 그 위젯의 `metadata.display` 를 지운다 |
 | 소수점 보기 | `numberFormat` 을 지운다 (`62%` → `62.0%`) |
 | 색 바꾸기 | `"color": "hex:FF79C6"` |
-| 모델별 숨기기 | 둘째 줄의 `weekly-*-usage`·`fable-weekly-usage` 를 지운다 |
-| 위젯 더 보기 | `ccstatusline` 을 그냥 실행하면 고르는 화면이 뜬다 |
+| 모델별 숨기기 | 둘째 줄의 `weekly-*-usage` 와 `fable-weekly-usage` 를 지운다 |
+| 줄 더하기 | `lines` 에 배열을 하나 더 넣는다 |
+| 위젯 목록 보기 | `ccstatusline` 을 그냥 실행하면 고르는 화면이 뜬다 |
 
-되돌리려면 설치할 때 남겨 둔 `settings.json.bak-*` 를 덮어쓰면 된다.
+고치면 바로 반영된다. Claude Code 를 다시 켤 필요 없다.
 
-## 무엇이 들어 있나
+### 되돌리기
+
+설치할 때 남긴 백업을 덮어쓰면 된다.
+
+```bash
+ls ~/.config/ccstatusline/settings.json.bak-*
+cp ~/.config/ccstatusline/settings.json.bak-<시각> ~/.config/ccstatusline/settings.json
+```
+
+ccstatusline 기본값으로 아주 돌아가려면 설정 파일을 지운다. 도구가 다음 실행 때 기본값을
+다시 만든다.
+
+```bash
+rm ~/.config/ccstatusline/settings.json
+```
+
+상태줄 자체를 끄려면 `~/.claude/settings.json` 에서 `statusLine` 을 지운다.
+
+---
+
+## 사슬 스크립트
+
+상태줄을 바로 부르지 않고 `~/.claude/statusline.sh` 를 한 번 거친다. 이유가 셋이다.
+
+**`NODE_OPTIONS` 를 끊는다.** 이것 때문에 넣었다. 바깥에서 `--require` 로 임시 파일을
+preload 하게 걸어 두는 도구가 있는데, 그 임시 파일을 OS 가 청소해 간다. 사라진 뒤에는
+node 가 시작조차 못 하고, 그러면 **상태줄이 오류 없이 그냥 안 보인다.** 오류 메시지가 없어서
+원인을 찾기가 아주 어렵다.
+
+**`COLUMNS` 를 `stty` 로 실측한다.** 상태줄은 stdout 이 파이프로 물려 있어서 터미널 폭이
+안 내려온다. 안 재면 줄바꿈 계산이 틀려 화면이 접힌다.
+
+**느린 일은 뒤로 보낸다.** 렌더링을 늦추지 않는다.
+
+---
+
+## 걸렸던 것들
+
+설정을 만들면서 실제로 막혔던 자리다. 전부 **오류 없이 조용히 안 되는** 종류라 적어 둔다.
+
+**색은 `hex:RRGGBB` 형식이다.**
+
+```jsonc
+{ "color": "hex:39FF14" }   // 된다
+{ "color": "#39FF14" }      // 안 된다. 굵게만 들어가고 색이 안 나간다
+```
+
+**`colorLevel` 이 3 이어야 hex 가 그대로 나간다.** 2 면 가까운 256색으로 뭉개진다.
+
+**Fable 위젯만 이름 순서가 다르다.**
+
+```
+weekly-opus-usage      맞다
+weekly-sonnet-usage    맞다
+weekly-fable-usage     이런 건 없다
+fable-weekly-usage     이게 맞다
+```
+
+**설정은 `$HOME/.config/ccstatusline/` 에 둬야 한다.** ccstatusline 은 `XDG_CONFIG_HOME` 을
+보지 않는다. XDG 를 따라 다른 데 두면 파일은 잘 놓이는데 화면이 안 바뀐다.
+
+**막대 문자는 못 바꾼다.** `slider` 는 `▓░`(폭 10), `progress` 는 `[█░]`(대괄호 포함).
+둘 중에 고르는 것뿐이다. 여기서는 대괄호가 없는 `slider` 를 쓴다.
+
+---
+
+## 들어 있는 것
 
 ```
 claudecode-hub-ko/
@@ -163,15 +246,12 @@ claudecode-hub-ko/
         └── es.json  fr.json  de.json  pt-BR.json  ru.json
 ```
 
-## 언어를 더하려면
+## 언어 더하기
 
-`statusline/locales/` 의 아무 파일이나 복사해서 `customText` 만 바꾸면 된다.
-고칠 자리는 아홉 군데뿐이고, 색·막대·순서는 안 건드려도 된다. PR 환영.
+`statusline/locales/` 의 아무 파일이나 복사해서 **이름표 아홉 개만** 바꾸면 된다.
+`custom-text` 위젯은 열셋인데 그중 넷(`[`·`] │ `·` git:(`·`)`)은 뼈대라 그대로 둔다.
+색·막대·순서도 건드릴 필요 없다. PR 환영.
 
 ---
 
-<div align="center">
-
-[ccstatusline](https://github.com/sirmalloc/ccstatusline) 위에 세웠다 · MIT
-
-</div>
+[ccstatusline](https://github.com/sirmalloc/ccstatusline) 설정이다 · MIT
