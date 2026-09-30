@@ -111,54 +111,6 @@
         },
         "color": "hex:00E5FF",
         "bold": true
-      },
-      {
-        "id": "16",
-        "type": "custom-text",
-        "customText": " │ Opus ",
-        "color": "hex:8BE9FD"
-      },
-      {
-        "id": "17",
-        "type": "weekly-opus-usage",
-        "rawValue": true,
-        "numberFormat": {
-          "style": "whole"
-        },
-        "color": "hex:FFE600",
-        "bold": true
-      },
-      {
-        "id": "18",
-        "type": "custom-text",
-        "customText": " · Sonnet ",
-        "color": "hex:8BE9FD"
-      },
-      {
-        "id": "19",
-        "type": "weekly-sonnet-usage",
-        "rawValue": true,
-        "numberFormat": {
-          "style": "whole"
-        },
-        "color": "hex:FFE600",
-        "bold": true
-      },
-      {
-        "id": "20",
-        "type": "custom-text",
-        "customText": " · Fable ",
-        "color": "hex:8BE9FD"
-      },
-      {
-        "id": "21",
-        "type": "fable-weekly-usage",
-        "rawValue": true,
-        "numberFormat": {
-          "style": "whole"
-        },
-        "color": "hex:FFE600",
-        "bold": true
       }
     ],
     [
