@@ -1,0 +1,258 @@
+{
+  "version": 4,
+  "lines": [
+    [
+      {
+        "id": "1",
+        "type": "custom-text",
+        "customText": "[",
+        "color": "hex:6272A4"
+      },
+      {
+        "id": "2",
+        "type": "model",
+        "rawValue": true,
+        "color": "hex:50FA7B",
+        "bold": true
+      },
+      {
+        "id": "3",
+        "type": "custom-text",
+        "customText": "] │ ",
+        "color": "hex:6272A4"
+      },
+      {
+        "id": "4",
+        "type": "git-root-dir",
+        "rawValue": true,
+        "color": "hex:FFB86C",
+        "metadata": {
+          "hide": "no-git"
+        },
+        "bold": true
+      },
+      {
+        "id": "5",
+        "type": "custom-text",
+        "customText": " git:(",
+        "color": "hex:6272A4"
+      },
+      {
+        "id": "6",
+        "type": "git-branch",
+        "rawValue": true,
+        "color": "hex:FF79C6",
+        "metadata": {
+          "hide": "no-git"
+        },
+        "bold": true
+      },
+      {
+        "id": "7",
+        "type": "custom-text",
+        "customText": ")",
+        "color": "hex:6272A4"
+      }
+    ],
+    [
+      {
+        "id": "10",
+        "type": "custom-text",
+        "customText": "上下文 ",
+        "color": "hex:8BE9FD"
+      },
+      {
+        "id": "11",
+        "type": "context-percentage",
+        "rawValue": true,
+        "metadata": {
+          "display": "slider"
+        },
+        "numberFormat": {
+          "style": "whole"
+        },
+        "color": "hex:39FF14",
+        "bold": true
+      },
+      {
+        "id": "12",
+        "type": "custom-text",
+        "customText": " │ 用量 ",
+        "color": "hex:8BE9FD"
+      },
+      {
+        "id": "13",
+        "type": "session-usage",
+        "rawValue": true,
+        "metadata": {
+          "display": "slider"
+        },
+        "numberFormat": {
+          "style": "whole"
+        },
+        "color": "hex:FF4FD8",
+        "bold": true
+      },
+      {
+        "id": "14",
+        "type": "custom-text",
+        "customText": " │ 本週 ",
+        "color": "hex:8BE9FD"
+      },
+      {
+        "id": "15",
+        "type": "weekly-usage",
+        "rawValue": true,
+        "metadata": {
+          "display": "slider"
+        },
+        "numberFormat": {
+          "style": "whole"
+        },
+        "color": "hex:00E5FF",
+        "bold": true
+      },
+      {
+        "id": "16",
+        "type": "custom-text",
+        "customText": " │ Opus ",
+        "color": "hex:8BE9FD"
+      },
+      {
+        "id": "17",
+        "type": "weekly-opus-usage",
+        "rawValue": true,
+        "numberFormat": {
+          "style": "whole"
+        },
+        "color": "hex:FFE600",
+        "bold": true
+      },
+      {
+        "id": "18",
+        "type": "custom-text",
+        "customText": " · Sonnet ",
+        "color": "hex:8BE9FD"
+      },
+      {
+        "id": "19",
+        "type": "weekly-sonnet-usage",
+        "rawValue": true,
+        "numberFormat": {
+          "style": "whole"
+        },
+        "color": "hex:FFE600",
+        "bold": true
+      },
+      {
+        "id": "20",
+        "type": "custom-text",
+        "customText": " · Fable ",
+        "color": "hex:8BE9FD"
+      },
+      {
+        "id": "21",
+        "type": "fable-weekly-usage",
+        "rawValue": true,
+        "numberFormat": {
+          "style": "whole"
+        },
+        "color": "hex:FFE600",
+        "bold": true
+      }
+    ],
+    [
+      {
+        "id": "30",
+        "type": "custom-text",
+        "customText": "PR ",
+        "color": "hex:8BE9FD",
+        "merge": true,
+        "metadata": {
+          "hide": "merge-target-hidden"
+        }
+      },
+      {
+        "id": "31",
+        "type": "git-pr",
+        "rawValue": true,
+        "color": "hex:82AAFF",
+        "metadata": {
+          "hide": "no-git,no-data"
+        },
+        "bold": true
+      },
+      {
+        "id": "32",
+        "type": "separator"
+      },
+      {
+        "id": "33",
+        "type": "custom-text",
+        "customText": "CI ",
+        "color": "hex:8BE9FD",
+        "merge": true,
+        "metadata": {
+          "hide": "merge-target-hidden"
+        }
+      },
+      {
+        "id": "34",
+        "type": "git-ci-status",
+        "rawValue": true,
+        "color": "hex:5AF78E",
+        "metadata": {
+          "hide": "no-git,no-data"
+        },
+        "bold": true
+      },
+      {
+        "id": "35",
+        "type": "separator"
+      },
+      {
+        "id": "36",
+        "type": "custom-text",
+        "customText": "快取 ",
+        "color": "hex:8BE9FD",
+        "merge": true,
+        "metadata": {
+          "hide": "merge-target-hidden"
+        }
+      },
+      {
+        "id": "37",
+        "type": "cache-hit-rate",
+        "rawValue": true,
+        "color": "hex:C792EA",
+        "metadata": {
+          "hide": "empty"
+        },
+        "bold": true
+      }
+    ]
+  ],
+  "flexMode": "full",
+  "compactThreshold": 60,
+  "colorLevel": 3,
+  "defaultPaddingSide": "both",
+  "inheritSeparatorColors": false,
+  "globalBold": false,
+  "gitCacheTtlSeconds": 5,
+  "terminalWidthCacheTtlSeconds": 5,
+  "customCommandCacheTtlSeconds": 0,
+  "minimalistMode": false,
+  "powerline": {
+    "enabled": false,
+    "separators": [
+      ""
+    ],
+    "separatorInvertBackground": [
+      false
+    ],
+    "startCaps": [],
+    "endCaps": [],
+    "autoAlign": false,
+    "continueThemeAcrossLines": false
+  }
+}
