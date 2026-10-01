@@ -148,14 +148,15 @@
         "type": "git-pr",
         "rawValue": true,
         "color": "hex:82AAFF",
+        "bold": true,
         "metadata": {
           "hide": "no-git,no-data"
-        },
-        "bold": true
+        }
       },
       {
         "id": "32",
-        "type": "separator"
+        "type": "separator",
+        "character": " │ "
       },
       {
         "id": "33",
@@ -172,14 +173,15 @@
         "type": "git-ci-status",
         "rawValue": true,
         "color": "hex:5AF78E",
+        "bold": true,
         "metadata": {
           "hide": "no-git,no-data"
-        },
-        "bold": true
+        }
       },
       {
         "id": "35",
-        "type": "separator"
+        "type": "separator",
+        "character": " │ "
       },
       {
         "id": "36",
@@ -196,10 +198,95 @@
         "type": "cache-hit-rate",
         "rawValue": true,
         "color": "hex:C792EA",
+        "bold": true,
         "metadata": {
+          "cacheScopeSession": "true",
           "hide": "empty"
         },
-        "bold": true
+        "numberFormat": {
+          "style": "whole"
+        }
+      },
+      {
+        "id": "38",
+        "type": "separator",
+        "character": " │ "
+      },
+      {
+        "id": "39",
+        "type": "custom-text",
+        "customText": "읽기 ",
+        "color": "hex:8BE9FD",
+        "merge": true,
+        "metadata": {
+          "hide": "merge-target-hidden"
+        }
+      },
+      {
+        "id": "40",
+        "type": "cache-read",
+        "rawValue": true,
+        "color": "hex:C792EA",
+        "metadata": {
+          "cacheScopeSession": "true",
+          "hide": "empty"
+        },
+        "numberFormat": {
+          "style": "whole"
+        }
+      },
+      {
+        "id": "41",
+        "type": "separator",
+        "character": " │ "
+      },
+      {
+        "id": "42",
+        "type": "custom-text",
+        "customText": "쓰기 ",
+        "color": "hex:8BE9FD",
+        "merge": true,
+        "metadata": {
+          "hide": "merge-target-hidden"
+        }
+      },
+      {
+        "id": "43",
+        "type": "cache-write",
+        "rawValue": true,
+        "color": "hex:C792EA",
+        "metadata": {
+          "cacheScopeSession": "true",
+          "hide": "empty"
+        },
+        "numberFormat": {
+          "style": "whole"
+        }
+      },
+      {
+        "id": "44",
+        "type": "separator",
+        "character": " │ "
+      },
+      {
+        "id": "45",
+        "type": "custom-text",
+        "customText": "수명 ",
+        "color": "hex:8BE9FD",
+        "merge": true,
+        "metadata": {
+          "hide": "merge-target-hidden"
+        }
+      },
+      {
+        "id": "46",
+        "type": "cache-timer",
+        "rawValue": true,
+        "color": "hex:C792EA",
+        "bold": true,
+        "metadata": {
+          "hide": "empty"
+        }
       }
     ]
   ],
