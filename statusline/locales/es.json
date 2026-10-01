@@ -111,6 +111,25 @@
         },
         "color": "hex:00E5FF",
         "bold": true
+      },
+      {
+        "id": "16",
+        "type": "custom-text",
+        "customText": " │ Fable ",
+        "color": "hex:8BE9FD"
+      },
+      {
+        "id": "17",
+        "type": "fable-weekly-usage",
+        "rawValue": true,
+        "metadata": {
+          "display": "slider"
+        },
+        "numberFormat": {
+          "style": "whole"
+        },
+        "color": "hex:FFE600",
+        "bold": true
       }
     ],
     [
